@@ -7,11 +7,9 @@ export async function register({username, email, password}){
     try {
         const usuarioExistente = await User.findOne({username});
         const emailExitente = await User.findOne({email});
-
         if (usuarioExistente || emailExitente){
             return mensajes(400, "Usuario duplicado");
         }
-
         const {salt, hash} = encriptarPassword(password);
         const data = new User({username, email, password:hash, salt})
         var respuesta = await data.save();

@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import 'dotenv/config';
 import { mensajes } from "./manejoErrores.js";
+
 export function crearToken(dato){
     return new Promise((resolve, reject) => {
         jwt.sign(
