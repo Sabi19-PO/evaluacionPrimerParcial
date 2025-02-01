@@ -7,8 +7,11 @@ const router = Router();
 router.post("/registro", async(req,res)=>{
     //Es donde llegan todas las variables
     const respuesta = await register(req.body);
-    //console.log(respuesta);
-    res.cookie('token',respuesta.token).status(respuesta.status).json(respuesta.mensajeUsuario);
+    if(respuesta.status === 200){
+        res.cookie('token',respuesta.token).status(respuesta.status).json(respuesta);
+    }else{
+        res.status(respuesta.status).json(respuesta);
+    }   
 });
 
 router.post("/ingresar", async(req,res)=>{
@@ -47,20 +50,17 @@ router.post("/login", async (req, res) => {
     res.status(respuesta.status).json(respuesta);
 });
 
-// Obtener todos los usuarios
+//todos los usuarios
 router.get("/usuarios", async (req, res) => {
     try {
-        const usuarios = await User.find(); // Consulta todos los usuarios en la base de datos
-        if (usuarios.length === 0) {
-            return res.status(404).json({ codigo: 404, mensaje: "No hay usuarios disponibles" });
-        }
-        res.status(200).json(usuarios); // Retorna la lista de usuarios en JSON
+        const usuarios = await User.find();
+        res.status(usuarios.length ? 200 : 404).json(usuarios.length ? usuarios : mensajes(404, "No hay usuarios disponibles"));
     } catch (error) {
-        res.status(500).json({ codigo: 500, mensaje: "Error al obtener usuarios", error });
+        res.status(500).json(mensajes(500, "Error al obtener usuarios", error));
     }
 });
 
-// Obtener usuario por ID
+//usuarios por id
 router.get("/usuarios/:id", async (req, res) => {
     try {
         const usuario = await User.findById(req.params.id);
@@ -71,7 +71,7 @@ router.get("/usuarios/:id", async (req, res) => {
     }
 });
 
-// Borrar usuario por ID
+//borrar por id
 router.delete("/usuarios/:id", async (req, res) => {
     try {
         const usuario = await User.findByIdAndDelete(req.params.id);
@@ -82,7 +82,7 @@ router.delete("/usuarios/:id", async (req, res) => {
     }
 });
 
-// Actualizar usuario por ID
+//usuario actualizado
 router.put("/usuarios/:id", async (req, res) => {
     try {
         const usuario = await User.findByIdAndUpdate(req.params.id, req.body, { new: true, runValidators: true });
@@ -92,4 +92,6 @@ router.put("/usuarios/:id", async (req, res) => {
         res.status(500).json(mensajes(500, "Error al actualizar el usuario", error));
     }
 });
+
+
 export default router;

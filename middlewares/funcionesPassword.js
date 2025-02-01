@@ -15,10 +15,10 @@ export function validarPassword(password, salt, hash){
     return hashEvaluar == hash;
 }
 
-export function usuarioAutorizado(){
+export function usuarioAutorizado(params){
 
 }
 
-export function adminAutorizado(){
+export function adminAutorizado(params){
     
 }
