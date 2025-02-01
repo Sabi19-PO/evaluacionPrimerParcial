@@ -23,8 +23,8 @@ router.post("/ingresar", async(req,res)=>{
 router.get("/salir", async(req,res)=>{
     res.send("Estas en salir");
 });
-router.get("/usuarios", async(req,res)=>{
-    res.send("Estas en los usuario ");
+router.get("/usuario", async(req,res)=>{
+    res.send("Estas en  usuario ");
 });
 
 router.get("/administradores", async(req,res)=>{
